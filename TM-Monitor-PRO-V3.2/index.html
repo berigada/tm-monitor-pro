@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>T&M Monitor PRO v3.1</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="topbar">
+
+        <div class="logo">
+
+            <h1>T&M Monitor PRO</h1>
+
+            <span class="version">
+                Version 3.1
+            </span>
+
+        </div>
+
+        <div class="header-center">
+
+            <div class="clock-box">
+
+                <span class="clock-title">
+
+                    Dubai Time
+
+                </span>
+
+                <span id="dubaiClock">
+
+                    --:--:--
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="header-right">
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                <span id="connectionStatus">
+
+                    Connected
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================
+         MAIN
+    ========================================== -->
+
+    <main class="dashboard">
+
+
+
+        <!-- =====================================
+             WATCHLIST
+        ====================================== -->
+
+        <aside class="watchlist-panel">
+
+            <div class="panel-title">
+
+                Live Rates
+
+            </div>
+
+            <div class="watchlist-description">
+                Gold, Silver, WTI and Natural Gas prices updated live.
+            </div>
+
+            <div id="watchlist" class="asset-list">
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =====================================
+             CENTER
+        ====================================== -->
+
+        <section class="center-panel">
+
+
+
+            <!-- ==============================
+                 CHART
+            =============================== -->
+
+            <div class="chart-panel">
+
+                <div class="panel-title chart-title-row">
+                    <div>
+                        Live Chart
+                        <div id="selectedAssetName" class="selected-asset-name">Gold</div>
+                    </div>
+                    <div class="asset-price-info">
+                        <span id="selectedPrice">--</span>
+                        <span id="selectedChange" class="price-change">--</span>
+                    </div>
+                </div>
+
+                <div class="chart-controls">
+                    <div class="control-item">
+                        <label for="chartStyleSelect">Chart Style</label>
+                        <select id="chartStyleSelect">
+                            <option value="line">Line</option>
+                            <option value="area">Area</option>
+                            <option value="bars">Bars</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="chartContainer" class="chart-wrapper">
+                    <div id="tradingviewWidget" class="tradingview-widget"></div>
+                </div>
+
+                <div class="chart-footer">
+                    <span id="chartTrend">Intraday trend</span>
+                </div>
+
+            </div>
+
+
+
+            <!-- ==============================
+                 RECOMMENDATION PANEL
+            =============================== -->
+
+            <div class="decision-panel">
+
+                <div class="panel-title">
+
+                    Market Recommendation
+
+                </div>
+
+                <div class="decision-grid">
+
+                    <div class="decision-card">
+
+                        <div class="decision-label">
+
+                            Market Bias
+
+                        </div>
+
+                        <div
+                            id="marketBias"
+                            class="decision-value">
+
+                            Neutral
+
+                        </div>
+
+                    </div>
+
+                    <div class="decision-card">
+
+                        <div class="decision-label">
+
+                            Confidence
+
+                        </div>
+
+                        <div
+                            id="confidence"
+                            class="decision-value">
+
+                            --
+
+                        </div>
+
+                    </div>
+
+                    <div class="decision-card">
+
+                        <div class="decision-label">
+
+                            Signal
+
+                        </div>
+
+                        <div
+                            id="signal"
+                            class="decision-value">
+
+                            WAIT
+
+                        </div>
+
+                    </div>
+
+                    <div class="decision-card">
+
+                        <div class="decision-label">
+
+                            Risk
+
+                        </div>
+
+                        <div
+                            id="risk"
+                            class="decision-value">
+
+                            Medium
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="recommendationText" class="recommendation-summary">
+                    Select an asset from the live rates list to see a buy, sell or hold recommendation.
+                </div>
+
+            </div>
+             <!-- ==============================
+                 LOWER PANELS
+            =============================== -->
+
+            <div class="bottom-panels">
+
+                <!-- ==========================
+                     NEWS
+                =========================== -->
+
+                <div class="news-panel">
+
+                    <div class="panel-title">
+
+                        Market News
+
+                    </div>
+
+                    <div id="news">
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==========================
+                     AI COPILOT
+                =========================== -->
+
+                <div class="ai-panel">
+
+                    <div class="panel-title">
+
+                        T&M AI Copilot
+
+                    </div>
+
+                    <div
+                        id="chatHistory"
+                        class="chat-history">
+
+                    </div>
+
+                    <div class="chat-input">
+
+                        <input
+                            id="question"
+                            type="text"
+                            placeholder="Ask anything about Gold, WTI, Silver or Natural Gas...">
+
+                        <button
+                            id="sendButton">
+
+                            Send
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             RIGHT PANEL
+        ====================================== -->
+
+        <aside class="right-panel">
+
+            <!-- ==========================
+                 MARKET SESSIONS
+            =========================== -->
+
+            <div class="market-panel">
+
+                <div class="panel-title">
+
+                    Market Sessions
+
+                </div>
+
+                <div class="market-list">
+
+                    <div class="market-row">
+
+                        <span>Sydney</span>
+
+                        <span id="sydneyStatus" class="closed">
+
+                            CLOSED
+
+                        </span>
+
+                    </div>
+
+                    <div class="market-row">
+
+                        <span>Tokyo</span>
+
+                        <span id="tokyoStatus" class="closed">
+
+                            CLOSED
+
+                        </span>
+
+                    </div>
+
+                    <div class="market-row">
+
+                        <span>Hong Kong</span>
+
+                        <span id="hongkongStatus" class="closed">
+
+                            CLOSED
+
+                        </span>
+
+                    </div>
+
+                    <div class="market-row">
+
+                        <span>Shanghai</span>
+
+                        <span id="shanghaiStatus" class="closed">
+
+                            CLOSED
+
+                        </span>
+
+                    </div>
+
+                    <div class="market-row">
+
+                        <span>Mumbai</span>
+
+                        <span id="mumbaiStatus" class="closed">
+
+                            CLOSED
+
+                        </span>
+
+                    </div>
+
+                    <div class="market-row">
+
+                        <span>Frankfurt</span>
+
+                        <span id="frankfurtStatus" class="closed">
+
+                            CLOSED
+
+                        </span>
+
+                    </div>
+
+                    <div class="market-row">
+
+                        <span>London</span>
+
+                        <span id="londonStatus" class="closed">
+
+                            CLOSED
+
+                        </span>
+
+                    </div>
+
+                    <div class="market-row">
+
+                        <span>New York</span>
+
+                        <span id="newYorkStatus" class="closed">
+
+                            CLOSED
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- ==========================
+                 ECONOMIC CALENDAR
+            =========================== -->
+
+            <div class="calendar-panel">
+
+                <div class="panel-title">
+
+                    Economic Calendar
+
+                </div>
+
+                <div id="calendar">
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="footer">
+
+        <span>
+
+            T&M Monitor PRO v3.1 © 2026
+
+        </span>
+
+    </footer>
+
+</div>
+
+
+
+<!-- =========================================
+     JAVASCRIPT
+========================================== -->
+
+<script src="js/chart.js"></script>
+
+<script src="js/watchlist.js"></script>
+
+<script src="js/markets.js"></script>
+
+<script src="js/news.js"></script>
+
+<script src="js/calendar.js"></script>
+
+<script src="js/decision.js"></script>
+
+<script src="js/ai.js"></script>
+
+<script src="js/app.js"></script>
+  </body>
+
+</html>         
